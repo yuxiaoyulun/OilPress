@@ -1,0 +1,300 @@
+<!--
+ * @Description: 
+ * @Author: HuGao
+ * @Date: 2023-08-01 19:45:21
+ * @LastEditors: HuGao
+ * @LastEditTime: 2023-08-01 21:05:40
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./js/jquery.js"></script>
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="preload" as="script" href="./js/timer.js">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="content">
+    <div class="head"></div>
+    <div class="box">
+      <div class="b-left">
+        <div class="m-1">
+          <div class="t1 linkto">
+            <span class="title-text">原材料库存</span>
+          </div>
+          <div class="pie" id="inventory">
+
+          </div>
+        </div>
+        <div class="m-2">
+          <div class="t2">
+            <span class="title-text">原材料消耗</span>
+          </div>
+          <div class="table">
+            <div class="p1 cBlue">
+              <span class="item-1 f18 cfff">
+                <em class="colorEm blue"></em>
+                日消耗
+              </span>
+              <span class="item-1">88</span>
+              <span class="item-1">17%</span>
+            </div>
+            <div class="p1 cBlue2">
+              <span class="item-1 f18 cfff">
+                <em class="colorEm blue2"></em>
+                周消耗
+              </span>
+              <span class="item-1">88</span>
+              <span class="item-1">17%</span>
+            </div>
+            <div class="p1 cGreen">
+              <span class="item-1 f18 cfff">
+                <em class="colorEm green"></em>
+                月消耗
+              </span>
+              <span class="item-1">88</span>
+              <span class="item-1">17%</span>
+            </div>
+          </div>
+          <div class="line">
+            <p class="tabs">
+              <span class="tab-item active">日消耗</span>
+              <span class="tab-item">周消耗</span>
+              <span class="tab-item">月消耗</span>
+            </p>
+            <div class="line-chart" style="width: 421px;height:244px;" id="consumption"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="b-right">
+        <div class="tools">
+          <div class="tool1 cfff">
+            <p id="r_timer"></p>
+            <span id="r_date"></span>
+          </div>
+          <div class="tool2 cfff">
+            <em class="icon">
+              <img src="./img/cloud.png" alt="">
+            </em>
+            <div class="info">
+              <p>多云</p>
+              <span>32℃</span>
+            </div>
+          </div>
+        </div>
+        <div class="m-1">
+          <div class="t1">
+            <span class="title-text">车间监测</span>
+          </div>
+          <div class="table2">
+            <div class="p1 cBlue">
+              <span class="item-2 f18 cfff">
+                油烟管压力（MPa）
+              </span>
+              <span class="item-2 w200">0.5</span>
+            </div>
+            <div class="p1 cBlue">
+              <span class="item-2 f18 cfff">
+                空气压力（MPa）
+              </span>
+              <span class="item-2 w200">0.5</span>
+            </div>
+            <div class="p1 cBlue">
+              <span class="item-2 f18 cfff">
+                氮气压力（MPa）
+              </span>
+              <span class="item-2 w200">0.5</span>
+            </div>
+            <div class="p1 cBlue">
+              <span class="item-2 f18 cfff">
+                温度环境（℃）
+              </span>
+              <span class="item-2 w200">0.5</span>
+            </div>
+          </div>
+        </div>
+        <div class="m-2">
+          <div class="t1">
+            <span class="title-text">车间日产量</span>
+          </div>
+          <div class="img-box">
+            <div class="tx1">
+              <p class="cFFB921 f44">80</p>
+              <span class="cfff f18">总产量</span>
+            </div>
+            <div class="tx2">
+              <p class="c00D68A f36">20</p>
+              <span class="cfff f18">脱皮产线</span>
+            </div>
+            <div class="tx3">
+              <p class="c09F2ED f36">60</p>
+              <span class="cfff f18">冷榨产线</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="b-bottom">
+        <div class="bt-ct1">
+          <div class="flow_tabs">
+            <span class="active"></span>
+            <span></span>
+          </div>
+          <img class="flow_img" src="./img/flow_img.png" alt="">
+          <img class="flow_img dis_none" src="./img/flow_img.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="./js/timer.js"></script>
+<script>
+  (function () {
+    var timeBox = document.getElementById('r_timer');
+    var dateBox = document.getElementById('r_date');
+    timeFn(timeBox, dateBox);
+  })();
+</script>
+<script src="./js/echarts.js"></script>
+<script src="./js/jquery.js"></script>
+<script>
+  var mychart = echarts.init(document.getElementById('inventory'));
+
+  var option = {
+    series: [
+      {
+        color: [{
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [{
+            offset: 0, color: '#1de5ff' // 0% 处的颜色
+          }, {
+            offset: 1, color: '#02aeff' // 100% 处的颜色
+          }],
+          global: false // 缺省为 false
+        }, 'rgba(128, 128, 128, 0)'],
+        name: 'Access From',
+        type: 'pie',
+        radius: ['60%', '70%'],
+        avoidLabelOverlap: false,
+        label: {
+          show: true,
+          position: 'center',
+          formatter: '{d|{d}}\n{b|{b}}',
+          color: '#ffffff',
+          rich: {
+            d: {
+              fontSize: 37,
+              padding: [10, 0, 14, 0],
+              lineHeight: 28
+            },
+            b: {
+              fontSize: 12,
+              padding: [14, 0, 0, 0],
+              lineHeight: 12
+            }
+          }
+        },
+        emphasis: {
+          disabled: true
+        },
+        labelLine: {
+          show: false
+        },
+        data: [
+          { value: 89.6, name: '当前库存' },
+          { value: 10.4, name: '' },
+        ]
+      }
+    ]
+  };
+  mychart.setOption(option);
+</script>
+<script>
+  function changeLine (x, data) {
+    var option = {
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: x,
+        minorTick: {
+          show: true,
+          splitNumber: 8,
+        }
+      },
+      yAxis: {
+        type: 'value',
+        minInterval: 500,
+        splitLine: {
+          show: true,
+          lineStyle: {
+            opacity: 0.2
+          }
+        },
+      },
+      series: [
+        {
+          color: ['#3ed7e6'],
+          data,
+          type: 'line',
+          smooth: true,
+          itemStyle: {
+            opacity: 0
+          },
+          areaStyle: {
+            color: {
+              type: 'linear',
+              x: 1,
+              y: 0.2,
+              x2: 1,
+              y2: 1,
+              colorStops: [{
+                offset: 0, color: 'rgba(30, 83, 92, 1)' // 0% 处的颜色
+              }, {
+                offset: 1, color: 'rgba(30, 83, 92, 0)' // 100% 处的颜色
+              }],
+              global: false // 缺省为 false
+            }
+          }
+        }
+      ]
+    };
+    return option;
+  };
+  (function () {
+    var mychart2 = echarts.init(document.getElementById('consumption'));
+    let arr = [
+      ['2018-02-01', '2018-02-02', '2018-02-03', '2018-02-04', '2018-02-05', '2018-02-06', '2018-02-07'],
+      ['2018-week1', '', '2018-week2', '', '2018-week3', '', '2018-week4'],
+      ['2018-02', '2018-03', '2018-04', '2018-05', '2018-06', '2018-07', '2018-08']
+    ];
+    let arr2 = [
+      [500, 1000, 302, 1201, 434, 800, 600],
+      [3500, 7000, 2102, 8401, 2834, 5600, 4200],
+      [15000, 30000, 9002, 36010, 12340, 24000, 18000],
+    ];
+    mychart2.setOption(changeLine(arr[0], arr2[0]));
+    $('.tabs .tab-item').click(function () {
+      let index = $(this).index();
+      let options = changeLine(arr[index], arr2[index]);
+      $(this).addClass('active').siblings().removeClass('active')
+      mychart2.setOption(options);
+    });
+
+    $('.flow_tabs span').click(function () {
+      let index = $(this).index();
+      $(this).addClass('active').siblings().removeClass('active');
+      $('.flow_img').eq(index).show().siblings('.flow_img').hide();
+    })
+  })();
+</script>
+
+</html>
